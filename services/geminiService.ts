@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Modality } from "@google/genai";
 
 const SYSTEM_INSTRUCTION = `
 Eres el "Profesor QuimicAI", un experto mundial en química y pedagogía científica. Tu objetivo es resolver cualquier problema de química, desde nivel escolar hasta nivel universitario avanzado (cinética, termodinámica, cuántica, orgánica, etc.).
@@ -81,5 +81,44 @@ export const solveChemistryProblem = async (
     } catch (error: any) {
         console.error("Error calling Gemini API:", error);
         throw new Error(error.message || "Error al conectar con el servicio de IA.");
+    }
+};
+
+export const generateVoiceExplanation = async (text: string): Promise<string> => {
+    try {
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        
+        // Clean markdown slightly for better speech parsing (optional, but helpful for TTS context)
+        const cleanText = `Por favor, lee la siguiente explicación química en voz alta para un estudiante, en español.
+        Ignora los símbolos de formato Markdown como almohadillas o asteriscos.
+        Lee las fórmulas químicas de forma natural y comprensible.
+        
+        Texto a leer:
+        ${text.substring(0, 4000)}...`; // Limit text length to avoid token limits on TTS if solution is massive
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash-preview-tts",
+            contents: [{ parts: [{ text: cleanText }] }],
+            config: {
+                responseModalities: [Modality.AUDIO],
+                speechConfig: {
+                    voiceConfig: {
+                        prebuiltVoiceConfig: { voiceName: 'Puck' }, // 'Puck' works well for neutral/educational tone
+                    },
+                },
+            },
+        });
+
+        const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        
+        if (!audioData) {
+            throw new Error("No se generó audio.");
+        }
+
+        return audioData;
+
+    } catch (error: any) {
+        console.error("Error generating speech:", error);
+        throw new Error("No se pudo generar el audio de la explicación.");
     }
 };
