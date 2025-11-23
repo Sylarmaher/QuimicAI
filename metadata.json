@@ -1,0 +1,8 @@
+{
+  "name": "QuimicAI - Resolutor Experto",
+  "description": "Un asistente avanzado de química impulsado por IA para resolver problemas complejos paso a paso, desde estequiometría hasta química cuántica.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
