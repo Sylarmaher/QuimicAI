@@ -17,13 +17,14 @@ const InputArea: React.FC<InputAreaProps> = ({ onSolve, isSolving }) => {
 
     const chemSymbols = [
         { category: "Números", symbols: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"] },
-        { category: "Math", symbols: ["+", "-", "×", "÷", "=", "±", "√", "·", "≈", "≠"] },
-        { category: "Constantes", symbols: ["π", "e"] },
+        { category: "Math", symbols: ["+", "-", "×", "÷", "=", "±", "√", "·", "≈", "≠", "∞", "%"] },
+        { category: "Cálculo", symbols: ["∫", "∬", "∂", "d", "∇", "|", "∑", "dx", "dy", "dt", "'"] },
+        { category: "Constantes", symbols: ["π", "e", "R", "k", "h"] },
         { category: "Reacción", symbols: ["→", "⇌", "↑", "↓", "∆"] },
         { category: "Estructura", symbols: ["[", "]", "(", ")", "{", "}"] },
         { category: "Estados", symbols: ["(s)", "(l)", "(g)", "(aq)", "°"] },
         { category: "Sub/Super", symbols: ["₀", "₁", "₂", "₃", "₄", "⁺", "⁻", "²", "³"] },
-        { category: "Griegas", symbols: ["α", "β", "γ", "μ", "λ", "Ω"] },
+        { category: "Griegas", symbols: ["α", "β", "γ", "δ", "ε", "λ", "μ", "ν", "π", "ρ", "σ", "τ", "φ", "ω", "Ω"] },
     ];
 
     const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +104,7 @@ const InputArea: React.FC<InputAreaProps> = ({ onSolve, isSolving }) => {
                                 className="text-xs font-medium text-indigo-600 dark:text-indigo-400 flex items-center space-x-1 hover:underline focus:outline-none"
                             >
                                 <Keyboard className="w-4 h-4" />
-                                <span>{showKeyboard ? "Ocultar símbolos" : "Mostrar símbolos químicos"}</span>
+                                <span>{showKeyboard ? "Ocultar símbolos" : "Mostrar símbolos químicos y matemáticos"}</span>
                                 {showKeyboard ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                             </button>
                         </div>
@@ -138,7 +139,7 @@ const InputArea: React.FC<InputAreaProps> = ({ onSolve, isSolving }) => {
                         ref={textareaRef}
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        placeholder={selectedImage ? "Añade instrucciones adicionales para la imagen (opcional)..." : "Ej: Calcula el pH de una solución 0.1M de HCl..."}
+                        placeholder={selectedImage ? "Añade instrucciones adicionales para la imagen (opcional)..." : "Ej: Calcula la integral de e^x... o cinética de reacción..."}
                         className="w-full min-h-[120px] p-4 pr-12 text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 rounded-xl border-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition-all resize-none placeholder:text-slate-400 dark:placeholder:text-slate-500 font-sans"
                         disabled={isSolving}
                     />
